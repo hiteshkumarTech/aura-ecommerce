@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Your profile — AURA{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="page-head">
+    <h1>Your profile</h1>
+    <p>Account details and quick links.</p>
+  </div>
+</div>
+
+<div class="container" style="padding-bottom:4rem;">
+  <div class="panel" style="max-width:560px;">
+    <h2>Account</h2>
+    <dl class="detail-meta" style="margin-top:0;border:0;padding-top:.5rem;">
+      <div><dt>Username</dt><dd>{{ user.username }}</dd></div>
+      <div><dt>Email</dt><dd>{{ user.email|default:"—" }}</dd></div>
+      <div><dt>Member since</dt><dd>{{ user.date_joined|date:"F Y" }}</dd></div>
+    </dl>
+    <div class="confirm-actions" style="justify-content:flex-start;margin-top:1.5rem;">
+      <a href="{% url 'store:order_history' %}" class="btn btn--dark">My orders</a>
+      <a href="{% url 'store:product_list' %}" class="btn btn--ghost">Continue shopping</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

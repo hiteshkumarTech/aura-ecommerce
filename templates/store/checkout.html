@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Checkout — AURA{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="page-head">
+    <h1>Checkout</h1>
+    <p>Enter your shipping details to place the order.</p>
+  </div>
+</div>
+
+<div class="container">
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <div class="checkout-layout">
+      <div class="panel">
+        <h2>Shipping details</h2>
+        {% if form.non_field_errors %}<div class="nonfield-errors errorlist">{{ form.non_field_errors }}</div>{% endif %}
+        <div class="form-grid">
+          <div class="field field--full">
+            <label for="{{ form.full_name.id_for_label }}">Full name</label>
+            {{ form.full_name }}
+            {% if form.full_name.errors %}<div class="field-error">{{ form.full_name.errors.0 }}</div>{% endif %}
+          </div>
+          <div class="field">
+            <label for="{{ form.email.id_for_label }}">Email</label>
+            {{ form.email }}
+            {% if form.email.errors %}<div class="field-error">{{ form.email.errors.0 }}</div>{% endif %}
+          </div>
+          <div class="field">
+            <label for="{{ form.phone.id_for_label }}">Phone</label>
+            {{ form.phone }}
+            {% if form.phone.errors %}<div class="field-error">{{ form.phone.errors.0 }}</div>{% endif %}
+          </div>
+          <div class="field field--full">
+            <label for="{{ form.address.id_for_label }}">Address</label>
+            {{ form.address }}
+            {% if form.address.errors %}<div class="field-error">{{ form.address.errors.0 }}</div>{% endif %}
+          </div>
+          <div class="field">
+            <label for="{{ form.city.id_for_label }}">City</label>
+            {{ form.city }}
+            {% if form.city.errors %}<div class="field-error">{{ form.city.errors.0 }}</div>{% endif %}
+          </div>
+          <div class="field">
+            <label for="{{ form.postal_code.id_for_label }}">Postal code</label>
+            {{ form.postal_code }}
+            {% if form.postal_code.errors %}<div class="field-error">{{ form.postal_code.errors.0 }}</div>{% endif %}
+          </div>
+          <div class="field field--full">
+            <label for="{{ form.country.id_for_label }}">Country</label>
+            {{ form.country }}
+            {% if form.country.errors %}<div class="field-error">{{ form.country.errors.0 }}</div>{% endif %}
+          </div>
+        </div>
+      </div>
+
+      <aside class="summary">
+        <h2>Your order</h2>
+        <div class="mini-lines">
+          {% for item in items %}
+            <div class="mini-line">
+              <div class="mini-thumb">
+                {% if item.product.image %}<img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                {% else %}<div class="mini-thumb-empty">{{ item.product.name|slice:":1" }}</div>{% endif %}
+                <span class="mini-qty">{{ item.quantity }}</span>
+              </div>
+              <div class="mini-info"><div class="mini-name">{{ item.product.name }}</div></div>
+              <div class="mini-price price">${{ item.subtotal|floatformat:2|intcomma }}</div>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="summary-row"><span>Subtotal</span><strong class="price">${{ cart.total|floatformat:2|intcomma }}</strong></div>
+        <div class="summary-row"><span>Shipping</span><strong>Free</strong></div>
+        <div class="summary-total">
+          <span class="label">Total</span>
+          <span class="value price">${{ cart.total|floatformat:2|intcomma }}</span>
+        </div>
+        <button type="submit" class="btn btn--primary btn--block">Place order</button>
+        <p class="summary-note">Demo checkout — no real payment is charged.</p>
+      </aside>
+    </div>
+  </form>
+</div>
+{% endblock %}

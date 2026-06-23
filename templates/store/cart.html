@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Your cart — AURA{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="page-head">
+    <h1>Your cart</h1>
+    <p>{% if items %}{{ cart.item_count }} item{{ cart.item_count|pluralize }} ready to go.{% else %}Your cart is empty.{% endif %}</p>
+  </div>
+</div>
+
+<div class="container">
+  {% if items %}
+    <div class="cart-layout">
+      <div class="cart-lines">
+        {% for item in items %}
+          <div class="line">
+            <a href="{{ item.product.get_absolute_url }}" class="line-media">
+              {% if item.product.image %}<img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+              {% else %}<div class="line-media-empty">{{ item.product.name|slice:":1" }}</div>{% endif %}
+            </a>
+            <div class="line-info">
+              <a href="{{ item.product.get_absolute_url }}"><div class="line-name">{{ item.product.name }}</div></a>
+              <div class="line-unit price">${{ item.product.price|floatformat:2|intcomma }} each</div>
+            </div>
+            <div class="line-controls">
+              <div class="line-subtotal price">${{ item.subtotal|floatformat:2|intcomma }}</div>
+              <form action="{% url 'store:cart_update' item.product.id %}" method="post" class="line-update-form">
+                {% csrf_token %}
+                <div class="qty qty--sm" data-qty data-autosubmit="true">
+                  <button type="button" data-qty-step="-1" aria-label="Decrease quantity">−</button>
+                  <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" aria-label="Quantity for {{ item.product.name }}">
+                  <button type="button" data-qty-step="1" aria-label="Increase quantity">+</button>
+                </div>
+                <noscript><button type="submit" class="btn btn--ghost">Update</button></noscript>
+              </form>
+              <form action="{% url 'store:cart_remove' item.product.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="line-remove">Remove</button>
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+        <a href="{% url 'store:product_list' %}" class="nav-link" style="margin-top:.5rem;">← Continue shopping</a>
+      </div>
+
+      <aside class="summary">
+        <h2>Order summary</h2>
+        <div class="summary-row"><span>Subtotal</span><strong class="price">${{ cart.total|floatformat:2|intcomma }}</strong></div>
+        <div class="summary-row"><span>Shipping</span><strong>Free</strong></div>
+        <div class="summary-total">
+          <span class="label">Total</span>
+          <span class="value price">${{ cart.total|floatformat:2|intcomma }}</span>
+        </div>
+        <a href="{% url 'store:checkout' %}" class="btn btn--primary btn--block">Checkout</a>
+        <p class="summary-note">Taxes calculated at checkout.</p>
+      </aside>
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <h3>Your cart is empty</h3>
+      <p>Browse the collection and add something you’ll actually use.</p>
+      <a href="{% url 'store:product_list' %}" class="btn btn--dark">Start shopping</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Your orders — AURA{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="page-head">
+    <h1>Your orders</h1>
+    <p>{% if orders %}{{ orders|length }} order{{ orders|length|pluralize }} placed.{% else %}You haven’t placed any orders yet.{% endif %}</p>
+  </div>
+</div>
+
+<div class="container">
+  {% if orders %}
+    <div class="orders">
+      {% for order in orders %}
+        <article class="order-card">
+          <div class="order-top">
+            <div>
+              <span class="order-id">{{ order.order_number }}</span>
+              <span class="order-date">· {{ order.created_at|date:"M j, Y" }}</span>
+            </div>
+            <span class="status status--{{ order.status }}">{{ order.get_status_display }}</span>
+          </div>
+          <div class="order-items">
+            {% for item in order.items.all %}{{ item.product_name }} (×{{ item.quantity }}){% if not forloop.last %} · {% endif %}{% endfor %}
+          </div>
+          <div class="order-foot">
+            <span class="order-total price">${{ order.total_amount|floatformat:2|intcomma }}</span>
+            <a href="{% url 'store:order_confirmation' order.order_number %}" class="nav-link nav-link--strong">View receipt →</a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <h3>No orders yet</h3>
+      <p>When you place an order, it’ll show up here.</p>
+      <a href="{% url 'store:product_list' %}" class="btn btn--dark">Browse products</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

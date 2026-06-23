@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Order {{ order.order_number }} — AURA{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="confirm">
+    <div class="confirm-check" aria-hidden="true">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+    </div>
+    <h1>Order confirmed</h1>
+    <p class="confirm-sub">Thanks, {{ order.full_name }} — we’ve emailed a receipt to {{ order.email }}.</p>
+    <p class="confirm-sub">Order number <span class="confirm-number">{{ order.order_number }}</span></p>
+
+    <div class="panel receipt">
+      <h2>Summary</h2>
+      <div class="receipt-lines">
+        {% for item in order.items.all %}
+          <div class="receipt-line">
+            <span class="name">{{ item.product_name }} <span class="meta">× {{ item.quantity }}</span></span>
+            <span class="price">${{ item.subtotal|floatformat:2|intcomma }}</span>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="receipt-total">
+        <span>Total paid</span>
+        <span class="value price">${{ order.total_amount|floatformat:2|intcomma }}</span>
+      </div>
+      <div class="ship-to">
+        <strong>Shipping to</strong><br>
+        {{ order.address }}<br>
+        {{ order.city }}, {{ order.postal_code }}<br>
+        {{ order.country }}
+      </div>
+    </div>
+
+    <div class="confirm-actions">
+      <a href="{% url 'store:order_history' %}" class="btn btn--dark">View my orders</a>
+      <a href="{% url 'store:product_list' %}" class="btn btn--ghost">Keep shopping</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

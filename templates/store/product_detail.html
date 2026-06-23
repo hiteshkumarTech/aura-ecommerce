@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}{{ product.name }} — AURA{% endblock %}
+
+{% block content %}
+<div class="container">
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="{% url 'store:product_list' %}">Shop</a><span>/</span>
+    <a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a><span>/</span>
+    <span>{{ product.name }}</span>
+  </nav>
+</div>
+
+<section class="detail">
+  <div class="container detail-grid">
+    <div class="detail-media">
+      {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+      {% else %}
+        <div class="detail-media-empty">{{ product.name|slice:":1" }}</div>
+      {% endif %}
+    </div>
+
+    <div class="detail-info">
+      <span class="detail-cat">{{ product.category.name }}</span>
+      <h1>{{ product.name }}</h1>
+      <div class="detail-price price">${{ product.price|floatformat:2|intcomma }}</div>
+
+      <p class="detail-desc">{{ product.description|linebreaksbr }}</p>
+
+      <div class="stock-row">
+        {% if product.in_stock %}
+          <span class="dot dot--in"></span><span class="stock-in">In stock — {{ product.stock }} available</span>
+        {% else %}
+          <span class="dot dot--out"></span><span class="stock-out">Out of stock</span>
+        {% endif %}
+      </div>
+
+      <form action="{% url 'store:cart_add' product.id %}" method="post" class="buy-row">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{% url 'store:cart_detail' %}">
+        <div class="qty" data-qty>
+          <button type="button" data-qty-step="-1" aria-label="Decrease quantity">−</button>
+          <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" aria-label="Quantity" {% if not product.in_stock %}disabled{% endif %}>
+          <button type="button" data-qty-step="1" aria-label="Increase quantity">+</button>
+        </div>
+        <button type="submit" class="btn btn--primary" {% if not product.in_stock %}disabled aria-disabled="true"{% endif %}>
+          {% if product.in_stock %}Add to cart{% else %}Sold out{% endif %}
+        </button>
+      </form>
+
+      <dl class="detail-meta">
+        <div><dt>Category</dt><dd>{{ product.category.name }}</dd></div>
+        <div><dt>Availability</dt><dd>{% if product.in_stock %}Ships in 1–2 days{% else %}Currently unavailable{% endif %}</dd></div>
+        <div><dt>SKU</dt><dd>AUR-{{ product.id|stringformat:"04d" }}</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+{% if related_products %}
+<section class="related">
+  <div class="container">
+    <h2>More in {{ product.category.name }}</h2>
+    <div class="product-grid">
+      {% for item in related_products %}
+        <article class="card">
+          <a href="{{ item.get_absolute_url }}" class="card-media" aria-label="{{ item.name }}">
+            {% if item.image %}<img src="{{ item.image.url }}" alt="{{ item.name }}" loading="lazy">
+            {% else %}<div class="card-media-empty">{{ item.name|slice:":1" }}</div>{% endif %}
+          </a>
+          <div class="card-body">
+            <span class="card-cat">{{ item.category.name }}</span>
+            <a href="{{ item.get_absolute_url }}"><h3 class="card-name">{{ item.name }}</h3></a>
+            <div class="card-foot">
+              <span class="card-price price">${{ item.price|floatformat:2|intcomma }}</span>
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}
