@@ -1,12 +1,12 @@
-{% load static %}
+﻿{% load static %}
 {% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}AURA — Considered goods{% endblock %}</title>
-  <meta name="description" content="AURA — a small shop of considered goods for work, sound, and home.">
+  <title>{% block title %}AURA â€” Considered goods{% endblock %}</title>
+  <meta name="description" content="AURA â€” a small shop of considered goods for work, sound, and home.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;450;500;600&display=swap" rel="stylesheet">
@@ -70,10 +70,11 @@
         <span class="brand-mark brand-mark--sm">AURA</span>
         <p class="footer-note">Considered goods for work, sound, and home.</p>
       </div>
-      <p class="footer-meta">© {% now "Y" %} AURA. A demo store built with Django.</p>
+      <p class="footer-meta">Â© {% now "Y" %} AURA · Built by <a href="https://github.com/hiteshkumarTech/aura-ecommerce" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">Hitesh Kumar</a> · <a href="https://github.com/hiteshkumarTech" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">GitHub</a> · <a href="https://www.linkedin.com/in/hitesh-kumar-0b7702416" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">LinkedIn</a></p>
     </div>
   </footer>
 
   <script src="{% static 'js/main.js' %}" defer></script>
 </body>
 </html>
+
