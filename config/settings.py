@@ -182,3 +182,9 @@ _rh = _os.getenv("RENDER_EXTERNAL_HOSTNAME")
 if _rh:
     ALLOWED_HOSTS = list(ALLOWED_HOSTS) + [_rh]
     CSRF_TRUSTED_ORIGINS = list(CSRF_TRUSTED_ORIGINS) + ["https://" + _rh]
+
+# --- Cloudinary media storage (only active when CLOUDINARY_URL is set) ---
+if _os.getenv("CLOUDINARY_URL"):
+    INSTALLED_APPS = list(INSTALLED_APPS) + ["cloudinary", "cloudinary_storage"]
+    STORAGES = dict(STORAGES)
+    STORAGES["default"] = {"BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage"}
