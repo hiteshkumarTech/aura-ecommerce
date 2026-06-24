@@ -1,0 +1,8 @@
+{% comment %}Product thumbnail: uploaded image if present, else a deterministic gradient tile. No external service.{% endcomment %}
+{% if product.image %}
+  <img src="{{ product.image.url }}" alt="{{ product.name }}"{% if lazy %} loading="lazy"{% endif %}>
+{% else %}
+  <div class="{{ css }} product-ph" style="--ph-bg:{{ product.ph_bg }};--ph-fg:{{ product.ph_fg }}" role="img" aria-label="{{ product.name }}">
+    <span>{{ product.initials }}</span>
+  </div>
+{% endif %}
