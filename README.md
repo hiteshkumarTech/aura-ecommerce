@@ -1,4 +1,52 @@
-# AURA — Django E-commerce Store
+# AURA — E-commerce Store
+
+A full-stack e-commerce store built with Django: product catalog, search, shopping cart, checkout with order processing, user registration/login, and an admin dashboard. Product images are served via Cloudinary, deployed on Render with PostgreSQL.
+
+**Live demo:** https://aura-ecommerce-s9wl.onrender.com
+**Source code:** https://github.com/hiteshkumarTech/aura-ecommerce
+
+> Note: the live site is on a free tier and "sleeps" after inactivity — the first load may take ~50 seconds to wake up.
+
+## Features
+
+- Product catalog with category filtering and search
+- Product detail pages
+- Shopping cart (guest + logged-in, merges on login)
+- Checkout and order processing
+- User registration, login, and order history
+- Admin dashboard for managing products, categories, and orders
+
+## Tech Stack
+
+- **Backend:** Django 5.1, Python 3.12
+- **Database:** PostgreSQL (production), SQLite (local)
+- **Frontend:** HTML, CSS, JavaScript
+- **Media:** Cloudinary
+- **Server:** Gunicorn + WhiteNoise
+- **Hosting:** Render
+
+## Run Locally
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+Copy-Item .env.example .env
+python manage.py migrate
+python manage.py seed
+python manage.py createsuperuser
+python manage.py runserver
+```
+
+Then open http://127.0.0.1:8000/ — admin at http://127.0.0.1:8000/admin/
+
+## Author
+
+**Hitesh Kumar**
+- GitHub: https://github.com/hiteshkumarTech
+- LinkedIn: https://www.linkedin.com/in/hitesh-kumar-0b7702416
+-
+- # AURA — Django E-commerce Store
 
 A complete, production-minded e-commerce store: product catalog, shopping cart,
 checkout with order processing, and user accounts. Built with Django + server-rendered
